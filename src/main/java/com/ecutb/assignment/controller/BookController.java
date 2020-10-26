@@ -37,12 +37,12 @@ public class BookController {
     }
 
     @GetMapping("/title/{title}")
-    public List<Book> getBooksByTitle(@RequestBody String title){
+    public List<Book> getBooksByTitle(@PathVariable String title){
         return bookService.getAllByTitle(title);
     }
 
     @GetMapping("/isbn/{isbn}")
-    public List<Book> getBooksByIsbn(@RequestBody String isbn){
+    public List<Book> getBooksByIsbn(@PathVariable String isbn){
         return bookService.getAllByIsbn(isbn);
     }
 
@@ -51,7 +51,7 @@ public class BookController {
         return bookService.getAllAvailable();
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public Book updateBook(@RequestBody Book book){
         return bookService.update(book);
     }
