@@ -16,7 +16,6 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-
     public List<Book> getAll(){
         var books = bookRepository.findAll();
         List<Book> result = new ArrayList<>();
@@ -86,13 +85,17 @@ public class BookService {
         return null;
     }
 
-    public Book update(Book book){
+    public void update(Book book){
         var result = findById(book.getId());
         if (result != null){
-            return bookRepository.save(book);
+           bookRepository.save(book);
         }
-        return null;
     }
+
+    public Book save(Book book){
+        return bookRepository.save(book);
+    }
+
 
     public void delete(int id){
         var result = findById(id);
@@ -101,8 +104,10 @@ public class BookService {
         }
     }
 
-    public Book save(Book book){
-        return bookRepository.save(book);
+    public void loan(Book book){
+        book.setAvailable(false);
+
     }
+
 
 }

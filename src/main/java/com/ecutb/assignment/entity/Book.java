@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Builder(toBuilder = true)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-@Setter(value = AccessLevel.PACKAGE)
+@Setter
 @Getter
 @Table(name = "Book")
 public class Book implements Serializable {
