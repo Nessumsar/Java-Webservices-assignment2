@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.DocFlavor;
+
 import java.util.List;
 
 @RestController
@@ -19,8 +19,9 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping
-    public List<Book> getAllBooks(){
-        return bookService.getAll();
+    public List<Book> getAllBooks(@RequestParam(required = false) String title,
+                                  @RequestParam(required = false) boolean sort){
+        return bookService.getAll(title, sort);
     }
 
     @GetMapping("/{id}")
@@ -29,33 +30,37 @@ public class BookController {
     }
 
     @GetMapping("/genre/{genre}")
-    public ResponseEntity<List<Book>> getBooksByGenre(@PathVariable String genre){
-        return ResponseEntity.ok(bookService.getAllInGenre(genre));
+    public ResponseEntity<List<Book>> getBooksByGenre(@PathVariable String genre,
+                                                      @RequestParam(required = false) boolean sort){
+        return ResponseEntity.ok(bookService.getAllInGenre(genre, sort));
     }
 
     @GetMapping("/author/{author}")
-    public ResponseEntity<List<Book>> getBooksByAuthor(@PathVariable String author){
-        return ResponseEntity.ok(bookService.getAllFromAuthor(author));
+    public ResponseEntity<List<Book>> getBooksByAuthor(@PathVariable String author,
+                                                       @RequestParam(required = false) boolean sort){
+        return ResponseEntity.ok(bookService.getAllFromAuthor(author, sort));
     }
 
     @GetMapping("/title/{title}")
-    public ResponseEntity<List<Book>> getBooksByTitle(@PathVariable String title){
-        return ResponseEntity.ok(bookService.getAllByTitle(title));
+    public ResponseEntity<List<Book>> getBooksByTitle(@PathVariable String title,
+                                                      @RequestParam(required = false) boolean sort){
+        return ResponseEntity.ok(bookService.getAllByTitle(title, sort));
     }
 
     @GetMapping("/isbn/{isbn}")
-    public ResponseEntity<List<Book>> getBooksByIsbn(@PathVariable String isbn){
-        return ResponseEntity.ok(bookService.getAllByIsbn(isbn));
+    public ResponseEntity<List<Book>> getBooksByIsbn(@PathVariable String isbn,
+                                                     @RequestParam(required = false) boolean sort){
+        return ResponseEntity.ok(bookService.getAllByIsbn(isbn, sort));
     }
 
     @GetMapping("/available")
-    public ResponseEntity<List<Book>> getBooksByAvailability(){
-        return ResponseEntity.ok(bookService.getAllAvailable());
+    public ResponseEntity<List<Book>> getBooksByAvailability(@RequestParam(required = false) boolean sort){
+        return ResponseEntity.ok(bookService.getAllAvailable(sort));
     }
 
     @PutMapping("/update")
-    public void updateBook(@RequestBody Book book){
-        bookService.update(book);
+    public ResponseEntity<Boolean> updateBook(@RequestBody Book book){
+        return ResponseEntity.ok(bookService.update(book));
     }
 
     @PostMapping("/new")
@@ -64,13 +69,13 @@ public class BookController {
     }
 
     @DeleteMapping("delete/{id}")
-    public void deleteBook(@PathVariable int id){
-        bookService.delete(id);
+    public ResponseEntity<Boolean> deleteBook(@PathVariable int id){
+        return ResponseEntity.ok(bookService.delete(id));
     }
 
     @PutMapping("/loan/{id}")
-    public void loanBook(@PathVariable int id){
-
+    public ResponseEntity<Boolean> loanBook(@PathVariable int id){
+        return ResponseEntity.ok(bookService.loan(id));
     }
 
 

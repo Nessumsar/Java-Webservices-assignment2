@@ -12,7 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Setter
 @Getter
-@Table(name = "Book")
+@Table(name = "book")
 public class Book implements Serializable {
     private static final long serialVersionUID = 8710430446784923307L;
 
