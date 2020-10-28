@@ -1,7 +1,6 @@
 package com.ecutb.assignment.repository;
 
 import com.ecutb.assignment.entity.Acl;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
