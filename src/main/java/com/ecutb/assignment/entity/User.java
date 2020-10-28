@@ -1,5 +1,7 @@
 package com.ecutb.assignment.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,19 +23,12 @@ public class User implements Serializable {
     @Id
     private String username;
     @NotEmpty(message = "Password cannot be empty.")
-    @Size(min = 5, max = 36, message = "Password must consist of 7 to 36 characters.")
+    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(length = 255)
     private String password;
 
-    //@ElementCollection
-    //private List<Acl> acl;
-
-   /*
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_acl",
-            joinColumns = @JoinColumn(name = "username_id"),
-            inverseJoinColumns = @JoinColumn(name = "acl_id")
-    )
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Acl> acl;
-    */
+
 }

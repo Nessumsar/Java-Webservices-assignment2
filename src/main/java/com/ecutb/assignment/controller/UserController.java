@@ -1,6 +1,5 @@
 package com.ecutb.assignment.controller;
 
-
 import com.ecutb.assignment.entity.User;
 import com.ecutb.assignment.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +22,11 @@ public class UserController {
        return ResponseEntity.ok(userService.save(user));
     }
 
+
     @GetMapping
     public ResponseEntity<List<String>> getAllUsers(@RequestParam(required = false) String name,
-                                                    @RequestParam(required = false) boolean reverseSort){
-        return ResponseEntity.ok(userService.getAll(name, reverseSort));
+                                                    @RequestParam(required = false) boolean reverseSort,
+                                                    @RequestParam(required = false) boolean getAcl){
+        return ResponseEntity.ok(userService.getAll(name, reverseSort, getAcl));
     }
 }
