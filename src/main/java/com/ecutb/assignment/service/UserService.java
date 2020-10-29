@@ -2,7 +2,6 @@ package com.ecutb.assignment.service;
 
 import com.ecutb.assignment.entity.Acl;
 import com.ecutb.assignment.entity.User;
-import com.ecutb.assignment.repository.AclRepository;
 import com.ecutb.assignment.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,23 +20,21 @@ import java.util.List;
 public class UserService{
 
     private final UserRepository userRepository;
-    private final AclRepository aclRepository;
     private final PasswordEncoder passwordEncoder;
 
     public User save(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         List<Acl> aclList = user.getAcl();
-        aclList.forEach(aclRepository::save);
+        aclList.forEach(
+                acl -> {
+                    acl.setUser(user);
+                }
+        );
         return userRepository.save(user);
     }
 
-    /**
-     * Anledningen till att det finns en boolean getAcl här är för att illustrera att det går ut att få ut den roller som användarna får.
-     * Problemet är att eftersom det blev väldigt struligt med SQL, lyckades jag inte få Acl att mappas korrekt till User.
-     * Acl kunde aldrig bindas till en användare och därför kunde man aldrig få ut en roll bunden till användare vid annat tillfälle än vid skapandet.
-     *
-     */
-    public List<String> getAll(String username, boolean reverseSort, boolean getAcl){
+
+    public List<String> getAll(String username, boolean reverseSort){
         var users = userRepository.findAll();
         List<String> result = new ArrayList<>();
         users.forEach(user -> {
@@ -47,29 +44,18 @@ public class UserService{
                 }
             }else{
                 result.add(user.getUsername());
+
             }
         });
 
-        //Get roles
-        List<String> aclList = new ArrayList<>();
-        var roles = new ArrayList<>();
-        var acls = aclRepository.findAll();
-        acls.forEach(acl ->  roles.add(acl.getRole()));
-
-        roles.forEach(role -> {
-            aclList.add("Role: " + role);
-        });
 
         //Already sorted by natural order as default
         if(reverseSort){
             result.sort(Comparator.reverseOrder());
         }
 
-        if (getAcl && (!reverseSort)){
-            return aclList;
-        }else{
             return result;
-        }
+
     }
 
     public User findByUsername(String username){

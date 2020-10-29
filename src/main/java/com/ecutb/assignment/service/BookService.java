@@ -25,16 +25,13 @@ public class BookService {
             books.forEach(book -> {
                 if (book.getTitle().equals(title)){
                     result.add(book);
-                }
-            });
+                }});
         }else{
             books.forEach(result::add);
         }
-
         if (sort){
             result.sort(Comparator.comparing(Book::getTitle));
         }
-
         return result;
     }
 
@@ -119,6 +116,7 @@ public class BookService {
                 result.add(book);
             }
         });
+
         if (result.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     String.format("Could not find any books by isbn %s", isbn));
@@ -154,7 +152,6 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-
     public boolean delete(int id){
         var result = findById(id);
         if (result != null){
@@ -173,11 +170,23 @@ public class BookService {
     public boolean loan(int id){
         var book = findById(id);
         if (book == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Can not find book with id %s", id));
+        }else if (!book.isAvailable()){
+            throw new ResponseStatusException(HttpStatus.IM_USED, String.format("Book with id %s can not be loaned: not available", id));
         }
         book.setAvailable(false);
         return true;
     }
 
+    public boolean returnLoan(int id){
+        var book = findById(id);
+        if (book == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Can not find book with id %s", id));
+        }else if (book.isAvailable()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Book with id %s can not be returned: not loaned"));
+        }
+        book.setAvailable(true);
+        return true;
+    }
 
 }

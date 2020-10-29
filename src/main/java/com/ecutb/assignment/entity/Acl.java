@@ -1,5 +1,6 @@
 package com.ecutb.assignment.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,6 +18,7 @@ public class Acl implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(name = "user_acl", joinColumns = @JoinColumn(name = "username"),
             inverseJoinColumns = @JoinColumn(name = "acl_id"))
